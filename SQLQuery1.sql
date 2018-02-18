@@ -2,6 +2,7 @@ create database DVTestMail
 go
 
 ---------------------------------------------------------------
+use DVTestMail
 
 create table Employee
 (
@@ -78,28 +79,30 @@ create procedure SendLetter
 as
 	declare @datesend smalldatetime
 	set @datesend = Cast(GetDate() as smalldatetime)
-	insert into Recepient(@letterID, @empoyeeID, @datesend, 0)
-	
+	insert into Recepient values (@letterID, @empoyeeID, @datesend, 0)
+go
 	
 create procedure ReadLetter
 	@letterID uniqueidentifier,
 	@userID uniqueidentifier
 as
-	update Recepient set IsRead = 1 where LetterID = @leterID and EmployeeID = @userID
-	
+	update Recepient set IsRead = 1 where LetterID = @letterID and EmployeeID = @userID
+go	
 	
 create procedure GetNewLetters
 	@userID uniqueidentifier
 as
-	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.id where r.empoyeeID = @userID and r.IsRead = 0
-	
+	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.LetterID where r.EmployeeID = @userID and r.IsRead = 0
+go
+
 create procedure GetAllLetters
 	@userID uniqueidentifier
 as
-	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.id where r.EmployeeID = @userID
-	
+	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.LetterID where r.EmployeeID = @userID
+go
 
 create procedure GetSendedLetters
 	@userID uniqueidentifier
 as 
-	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.id where l.sender = @userID
+	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.LetterID where l.sender = @userID
+go

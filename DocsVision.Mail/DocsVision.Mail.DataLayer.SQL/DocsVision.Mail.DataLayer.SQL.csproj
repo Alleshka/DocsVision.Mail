@@ -40,9 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SQLLetterRepository.cs" />
-    <Compile Include="SQLUserRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TsqlLetterRepository.cs" />
+    <Compile Include="TsqlUserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DocsVision.Mail.DataLayer\DocsVision.Mail.DataLayer.csproj">
