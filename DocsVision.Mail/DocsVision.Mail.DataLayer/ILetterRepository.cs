@@ -9,17 +9,13 @@ namespace DocsVision.Mail.DataLayer
 {
     public interface ILetterRepository
     {
-        // Отправить сообщение
-        void SendLetter(Letter letter);
+        Letter CreateLetter(Letter letter);
+        void SendLetter(Guid letterID, Guid userID);
+        void ReadLetter(Guid letterID, Guid userID);
 
-        // Все сообщения для меня
-        IEnumerable<Letter> AllLetterForMe(Guid userID);
-        // Новые сообщения для меня
-        IEnumerable<Letter> NewLetterForMe(Guid userID);
+        IEnumerable<Letter> GetNewLetters(Guid userId);
+        IEnumerable<Letter> GetMyLetters(Guid userID);
 
-        // Все письма от меня
-        IEnumerable<Letter> AllLetterFromMe(Guid userID);
-
-        Letter GetLetterInfo(Guid letterID);
+        IEnumerable<Letter> GetSendedLetters(Guid userID);
     }
 }

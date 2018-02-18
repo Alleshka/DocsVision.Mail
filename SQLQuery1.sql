@@ -1,107 +1,105 @@
-create database DVMail
+create database DVTestMail
 go
 
-use DVMail
-create table UserLogin
+---------------------------------------------------------------
+
+create table Employee
 (
 	id uniqueidentifier primary key not null,
-	userLogin nvarchar(40) not null unique,
-	userPassword nvarchar(40) not null,
+	Login nvarchar(40) not null,
+	Password nvarchar(40) not null,
+	FirstName nvarchar(40),
+	LastName nvarchar(40)
 )
 
-create table UserInfo
-(
-	id uniqueidentifier primary key references UserLogin(id) not null,
-	FirstName nvarchar(40) not null,
-	LastName nvarchar(40) not null,
-)
-
-create table Letter		
-(
+create table Letter
+(	
 	id uniqueidentifier primary key not null,
 	head nvarchar(40) not null,
-	senddate datetime2	not null,		
-	sender uniqueidentifier references UserLogin(id) not null,
-	recipient uniqueidentifier references UserLogin(id) not null,	
-	contentmessage nvarchar(max) not null,
-	IsRead bit not null,
-)		
+	contentmessage nvarchar(max) not null, 
+	sender uniqueidentifier references Employee(id) not null,
+	createdate smalldatetime not null,
+)
+
+create table Recepient
+(
+	LetterID uniqueidentifier references Letter(id),
+	EmployeeID uniqueidentifier references Employee(id),
+	senddate smalldatetime not null,
+	isRead bit not null
+	primary key(LetterID, EmployeeID)
+)
 go
 
---------------- #region USER -----------------------------
+---------------------------------------------------------------------
 
--- Create user
+-- #Region user
+
 create procedure CreateUser
 	@id uniqueidentifier,
 	@Login nvarchar(40),
-	@Password nvarchar(40), 
-	@FirstName nvarchar(40),
-	@LastName nvarchar(40)
+	@Password nvarchar(40),
+	@FirstName nvarchar(40) = '',
+	@LastName nvarchar(40) = ''
 as
-	insert into UserLogin(id, userLogin, userPassword)
-	values(@id, @Login, @Password)
-
-	insert into UserInfo(id, FirstName, LastName)
-	values(@id, @FirstName, @LastName)
-go
-
--- Delete user
-create procedure DeleteUser
-	@id uniqueidentifier
-as
-	delete Letter where sender = @id -- Not sure
-	delete UserInfo where id = @id
-	delete UserLogin where id = @id
-go
+	insert into Employee values (@id, @Login, @Password, @FirstName, @LastName)
+	select id, Login, FirstName, LastName from Employee where id = @id
+go	
 
 create procedure SignIn
 	@Login nvarchar(40),
 	@Password nvarchar(40)
 as
-	select id from UserLogin where userLogin = @Login and userPassword = @Password
+	select id, login, FirstName, LastName From Employee where login = @Login and Password = @Password
 go
 
 create procedure GetUserInfo
 	@id uniqueidentifier
 as
-	select * from UserInfo where id = @id
+	select id, login, FirstName, LastName from Employee where id = @id
 go
-
---------------- #region Letter -----------------------------
-
-create procedure AddLetter
+	
+-- #Region letter
+create procedure CreateLetter
 	@id uniqueidentifier,
 	@head nvarchar(40),
-	@sender uniqueidentifier,
-	@recipient uniqueidentifier,
-	@content nvarchar(max)
-as 
-	declare @currentdate datetime2
-	set @currentdate = GetDate()
-	insert into Letter(id, head, senddate, sender, recipient, contentmessage, IsRead)
-	values (@id, @head, @currentdate, @sender, @recipient, @content, 0)
-go
-
-create procedure GetLettersFromMe
-	@id uniqueidentifier
+	@contentmessage nvarchar(max),
+	@sender uniqueidentifier
 as
-	select * from Letter where sender = @id
+	declare @datecreate smalldatetime
+	set @datecreate = Cast(GetDate() as smalldatetime)
+	insert into Letter values (@id, @head, @contentmessage, @sender, @datecreate)
+	select * from Letter where id = @id
 go
 
-create procedure GetAllLettersForMe
-	@id uniqueidentifier
-as 
-	select * from Letter where recipient = id
-go
-
-create procedure GetNewLettersFromMe
-	@id uniqueidentifier
+create procedure SendLetter
+	@letterID uniqueidentifier,
+	@empoyeeID uniqueidentifier
 as
-	select * from Letter where recipient = id and IsRead = 0
-go
-
+	declare @datesend smalldatetime
+	set @datesend = Cast(GetDate() as smalldatetime)
+	insert into Recepient(@letterID, @empoyeeID, @datesend, 0)
+	
+	
 create procedure ReadLetter
-	@id uniqueidentifier
+	@letterID uniqueidentifier,
+	@userID uniqueidentifier
 as
-	update Letter set IsRead = 1 where id = @id
-go
+	update Recepient set IsRead = 1 where LetterID = @leterID and EmployeeID = @userID
+	
+	
+create procedure GetNewLetters
+	@userID uniqueidentifier
+as
+	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.id where r.empoyeeID = @userID and r.IsRead = 0
+	
+create procedure GetAllLetters
+	@userID uniqueidentifier
+as
+	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.id where r.EmployeeID = @userID
+	
+
+create procedure GetSendedLetters
+	@userID uniqueidentifier
+as 
+	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.id where l.sender = @userID

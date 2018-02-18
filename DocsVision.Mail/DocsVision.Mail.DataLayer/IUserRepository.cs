@@ -9,9 +9,8 @@ namespace DocsVision.Mail.DataLayer
 {
     public interface IUserRepository
     {
-        // Создать нового пользователя
-        void CreateUser(UserLogin login, UserInfo info = null);
-
-        UserInfo GetUserInfo(Guid id);
+        Employee CreateEmployee(Employee employee); // Создание пользователя
+        Employee LoginEmployee(String login, String password); // Вход пользователя
+        Employee GetUserInfo(Guid id); // Получить информацию о пользователе
     }
 }
