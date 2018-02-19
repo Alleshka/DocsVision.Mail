@@ -12,7 +12,8 @@ namespace DocsVision.Mail.Model
         public String Head { get; set; }
         public String ContentMessage { get; set; }
         public Guid Sender { get; set; } 
-        public DateTime CreateDate { get; set; }
+        public Guid Recepient { get; set; }
+        // public DateTime CreateDate { get; set; }
         public DateTime SendDate { get; set; }
     }
 }

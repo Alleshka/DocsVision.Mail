@@ -13,6 +13,8 @@ namespace DocsVision.Mail.DataLayer
         void SendLetter(Guid letterID, Guid userID);
         void ReadLetter(Guid letterID, Guid userID);
 
+        Letter GetLetter(Guid id);
+
         IEnumerable<Letter> GetNewLetters(Guid userId);
         IEnumerable<Letter> GetMyLetters(Guid userID);
 

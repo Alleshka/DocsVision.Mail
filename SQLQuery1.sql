@@ -2,8 +2,8 @@ create database DVTestMail
 go
 
 ---------------------------------------------------------------
-use DVTestMail
 
+use DVTestMail
 create table Employee
 (
 	id uniqueidentifier primary key not null,
@@ -129,5 +129,10 @@ go
 create procedure GetSendedLetters
 	@userID uniqueidentifier
 as 
-	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.LetterID where l.sender = @userID
+	select l.id, l.head, l.contentmessage, l.sender, r.senddate, r.EmployeeID as rec from Letter as l join Recepient as r on l.id = r.LetterID where l.sender = @userID
 go
+
+create procedure GetLetterInfo
+	@letterId uniqueidentifier
+as
+	select * from Letter where id = @letterId

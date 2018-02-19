@@ -45,6 +45,28 @@ namespace DocsVision.Mail.DataLayer.SQL
             }
         }
 
+        public Letter GetLetter(Guid id)
+        {
+            using (var sql = new SqlConnection(_connectionString))
+            {
+                sql.Open();
+
+                using (var command = sql.CreateCommand())
+                {
+                    command.CommandText = "GetLetterInfo";
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@letterId", id);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read()) throw new Exception("Создание письма не удалось");
+                        else return ParseLetter(reader);
+                    }
+                }
+            }
+        }
+
         public IEnumerable<Letter> GetMyLetters(Guid userID)
         {
             using (var sql = new SqlConnection(_connectionString))
@@ -62,7 +84,10 @@ namespace DocsVision.Mail.DataLayer.SQL
                     {
                         while (reader.Read())
                         {
-                            yield return ParseLetter(reader);
+                            Letter letter = ParseLetter(reader);
+                            letter.Recepient = userID;
+                            letter.SendDate = reader.GetDateTime(reader.GetOrdinal("senddate"));
+                            yield return letter;
                         }
                     }
                 }
@@ -85,7 +110,10 @@ namespace DocsVision.Mail.DataLayer.SQL
                     {
                         while (reader.Read())
                         {
-                            yield return ParseLetter(reader);
+                            Letter letter = ParseLetter(reader);
+                            letter.Recepient = userId;
+                            letter.SendDate = reader.GetDateTime(reader.GetOrdinal("senddate"));
+                            yield return letter;
                         }
                     }
                 }
@@ -109,7 +137,10 @@ namespace DocsVision.Mail.DataLayer.SQL
                     {
                         while (reader.Read())
                         {
-                            yield return ParseLetter(reader);
+                            Letter letter = ParseLetter(reader);
+                            letter.Recepient = reader.GetGuid(reader.GetOrdinal("rec"));
+                            letter.SendDate = reader.GetDateTime(reader.GetOrdinal("senddate"));
+                            yield return letter;
                         }
                     }
                 }
@@ -156,13 +187,15 @@ namespace DocsVision.Mail.DataLayer.SQL
 
         private Letter ParseLetter(SqlDataReader reader)
         {
-            return new Letter()
+            Letter letter = new Letter()
             {
                 Id = reader.GetGuid(reader.GetOrdinal("id")),
                 Head = reader.GetString(reader.GetOrdinal("head")),
                 ContentMessage = reader.GetString(reader.GetOrdinal("contentmessage")),
-                Sender = reader.GetGuid(reader.GetOrdinal("sender"))
+                Sender = reader.GetGuid(reader.GetOrdinal("sender")),
             };
+
+            return letter;
         }
     }
 }
