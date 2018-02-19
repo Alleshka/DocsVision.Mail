@@ -49,6 +49,28 @@ namespace DocsVision.Mail.DataLayer.SQL
             }
         }
 
+        public Employee FindUserByLogin(string login)
+        {
+            using (var sql = new SqlConnection(_connectionString))
+            {
+                sql.Open();
+
+                using (var command = sql.CreateCommand())
+                {
+                    command.CommandText = "FindUserByLogin";
+                    command.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@login", login);
+
+                    using (var reader = command.ExecuteReader())
+                    {
+                        if (!reader.Read()) throw new Exception("Пользователь не найден");
+                        else return ParseEmployee(reader);
+                    }
+                }
+            }
+        }
+
         public Employee GetUserInfo(Guid id)
         {
             using (var sql = new SqlConnection(_connectionString))
@@ -82,8 +104,10 @@ namespace DocsVision.Mail.DataLayer.SQL
                     command.CommandText = "SignIn";
                     command.CommandType = System.Data.CommandType.StoredProcedure;
 
+                    String passHash = GetPassHash(password);
+
                     command.Parameters.AddWithValue("@Login", login);
-                    command.Parameters.AddWithValue("@Password", GetPassHash(password));
+                    command.Parameters.AddWithValue("@Password", passHash);
 
                     using (var reader = command.ExecuteReader())
                     {
@@ -94,15 +118,38 @@ namespace DocsVision.Mail.DataLayer.SQL
             }
         }
 
+        public void FullDeleteUser(Guid id)
+        {
+            using (var sql = new SqlConnection(_connectionString))
+            {
+                sql.Open();
+
+                using (var command = sql.CreateCommand())
+                {
+                    command.CommandText = "delete from Employee where id = @id";
+                    command.Parameters.AddWithValue("@id", id);
+
+                    command.ExecuteNonQuery();
+                }
+            }
+        }
+
         private String GetPassHash(String password)
         {
-            var data = System.Text.Encoding.UTF8.GetBytes(password);
+            var data = System.Text.Encoding.ASCII.GetBytes(password);
 
             var md5 = new MD5CryptoServiceProvider();
             var md5data = md5.ComputeHash(data);
 
-            var hashdata = System.Text.Encoding.UTF8.GetString(md5data);
-            return hashdata;
+            String result = "";
+
+            // Чтобы была норм строка, иначе крокозябры
+            foreach (var b in md5data)
+            {
+                result += b.ToString("x2");
+            }
+
+            return result;
         }
         private Employee ParseEmployee(SqlDataReader reader)
         {

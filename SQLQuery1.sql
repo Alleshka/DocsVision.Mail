@@ -7,10 +7,11 @@ use DVTestMail
 create table Employee
 (
 	id uniqueidentifier primary key not null,
-	Login nvarchar(40) not null,
+	Login nvarchar(40) unique not null,
 	Password nvarchar(40) not null,
 	FirstName nvarchar(40),
-	LastName nvarchar(40)
+	LastName nvarchar(40),
+	IsDeleted bit
 )
 
 create table Letter
@@ -43,7 +44,7 @@ create procedure CreateUser
 	@FirstName nvarchar(40) = '',
 	@LastName nvarchar(40) = ''
 as
-	insert into Employee values (@id, @Login, @Password, @FirstName, @LastName)
+	insert into Employee values (@id, @Login, @Password, @FirstName, @LastName, 0)
 	select id, Login, FirstName, LastName from Employee where id = @id
 go	
 
@@ -57,9 +58,33 @@ go
 create procedure GetUserInfo
 	@id uniqueidentifier
 as
-	select id, login, FirstName, LastName from Employee where id = @id
+	select id, login, FirstName, LastName from Employee where id = @id and IsDeleted = 0
 go
-	
+
+create procedure GetAllUsers
+	@id uniqueidentifier
+as
+	select id, login, FirstName, LastName from Employee where IsDeleted = 0 
+go
+
+create procedure DeleteUser
+	@id uniqueidentifier
+as
+	update Employee	set IsDeleted = 1 where id = @id
+go
+
+create procedure RestoreUser
+	@id uniqueidentifier
+as
+		update Employee	set IsDeleted = 0 where id = @id
+go
+
+create procedure FindUserByLogin
+	@Login nvarchar(40)
+as
+	select id, login, FirstName, LastName from Employee where Login = @Login
+go
+
 -- #Region letter
 create procedure CreateLetter
 	@id uniqueidentifier,

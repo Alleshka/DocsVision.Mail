@@ -9,7 +9,7 @@ using System.Data.SqlClient;
 
 namespace DocsVision.Mail.DataLayer.SQL
 {
-    class TsqlLetterRepository : ILetterRepository
+    public class TsqlLetterRepository : ILetterRepository
     {
         private String _connectionString;
 
