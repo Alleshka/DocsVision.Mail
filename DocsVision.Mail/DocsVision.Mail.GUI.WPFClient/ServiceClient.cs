@@ -39,6 +39,12 @@ namespace DocsVision.Mail.GUI.WPFClient
             return ResponseParse<Employee>(response);
         }
 
+        public Employee FindUserByID(String login)
+        {
+            var response = _client.GetAsync($"api/user/name/{login}").Result;
+            return ResponseParse<Employee>(response);
+        }
+
         public Employee CreateEmoloyee(Employee emp)
         {
             var response = _client.PostAsJsonAsync<Employee>($"api/user/reg", emp).Result;
@@ -83,16 +89,16 @@ namespace DocsVision.Mail.GUI.WPFClient
             ResponseParse<String>(response);
         }
 
-        public void SendLetter(Letter letter, List<Guid> users)
+        public void SendLetter(Letter letter, List<Employee> users)
         {
             // Создаём письмо
-            var response = _client.PutAsJsonAsync("api/letter", letter).Result;
+            var response = _client.PostAsJsonAsync("api/letter", letter).Result;
             Letter send = ResponseParse<Letter>(response);
 
             // Отправляем сообщения получателям
             foreach (var us in users)
             {
-                var resp = _client.PostAsJsonAsync<String>($"api/letter/{send.Id}/send/{us}", null).Result;
+                var resp = _client.PostAsJsonAsync<String>($"api/letter/{send.Id}/send/{us.Id}", null).Result;
                 ResponseParse<String>(resp);
             }
         }

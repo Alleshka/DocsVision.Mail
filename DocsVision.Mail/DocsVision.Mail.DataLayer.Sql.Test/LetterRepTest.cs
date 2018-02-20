@@ -25,11 +25,11 @@ namespace DocsVision.Mail.DataLayer.Sql.Test
             {
                 Head = "Тестовое письмо",
                 ContentMessage = "Тестовое содержание",
-                Sender = user1.Id
+                Sender = userRepository.GetUserInfo(user1.Id)
             };
 
             // Act
-            TsqlLetterRepository tsqlLetter = new TsqlLetterRepository(_connectionString);
+            TsqlLetterRepository tsqlLetter = new TsqlLetterRepository(_connectionString, new TsqlUserRepository(_connectionString));
             letter = tsqlLetter.CreateLetter(letter);
             tsqlLetter.SendLetter(letter.Id, user2.Id);
 

@@ -2,21 +2,20 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Collections.ObjectModel;
 using System.Configuration;
 using DocsVision.Mail.Model;
 using System.Windows.Input;
 
 namespace DocsVision.Mail.GUI.WPFClient.ViewModel
 {
-    public class LetterListViewModel : INotifyPropertyChanged
+    public class LetterListViewModel : BaseViewModel
     {
         private Guid curUserId;
         private ServiceClient _client;
 
         public LetterListViewModel(Guid id)
         {
-            Guid.TryParse("3e34bb2f-5692-4393-b19f-e4d7b5696cae", out curUserId);
+            curUserId = id;
             _client = new ServiceClient(ConfigurationManager.AppSettings["hostdomain"]);
         }
 
@@ -42,19 +41,7 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
             {
                 selectLetter = value;
                 ReadLetter.Execute(null);
-                AutorName = _client.GetUserInfo(selectLetter.Sender).Login;
                 OnPropertyChanged("SelectLetter");
-            }
-        }
-
-        private String autorName;
-        public String AutorName
-        {
-            get => autorName;
-            set
-            {
-                autorName = value;
-                OnPropertyChanged("AutorName");
             }
         }
 
@@ -69,21 +56,25 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
         {
             get => new BaseCommand((object obj) =>
             {
-                ListLetter = _client.GetAllLetters(curUserId);
+                try
+                {
+                    ListLetter = _client.GetAllLetters(curUserId);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message);
+                }
             });
         }
         public ICommand ReadLetter
         {
             get => new BaseCommand((object obj) =>
             {
-                _client.ReadLetter(SelectLetter.Id, curUserId);
+                if (selectLetter.IsRead == false)
+                {
+                    _client.ReadLetter(SelectLetter.Id, curUserId);
+                }
             });
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string prop = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
     }
 }

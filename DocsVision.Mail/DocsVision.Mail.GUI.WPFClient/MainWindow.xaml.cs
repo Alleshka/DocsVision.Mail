@@ -24,7 +24,9 @@ namespace DocsVision.Mail.GUI.WPFClient
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new LetterListViewModel(Guid.NewGuid());
+            Guid.TryParse("3E34BB2F-5692-4393-B19F-E4D7B5696CAE", out Guid id);
+            InBoxTab.DataContext = new LetterListViewModel(id);
+            SendBoxTab.DataContext = new SendLetterViewModel(id);
         }
     }
 }

@@ -6,45 +6,95 @@
         xmlns:local="clr-namespace:DocsVision.Mail.GUI.WPFClient"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="0.2*"/>
-            <RowDefinition Height="0.8*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.3*"/>
-            <ColumnDefinition Width="0.6*"/>
-        </Grid.ColumnDefinitions>
+    <TabControl>
+        <TabItem Header="Отправить" x:Name="SendBoxTab">
+            <Grid ShowGridLines="False">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="0.7*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0" Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            
-            <Button Command="{Binding LoadAllLetter}" Grid.Row="0">Получить все сообщения</Button>
-            <Button Command="{Binding LoadNewLetter}" Grid.Row="1">Получить новые сообщения</Button>
+                <TextBlock Text="Заголовок" Grid.Row="0" Grid.Column="0"/>
+                <TextBox Text="{Binding Head, Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
 
-        </Grid>
+                <TextBlock Text="Содержимое" Grid.Row="1" Grid.Column="0"/>
+                <TextBox Text="{Binding Content, Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
 
+                <TextBlock Text="Получатели" Grid.Row="2" Grid.Column="0"/>
+                <Grid Grid.Row="2" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBox Width="Auto" Grid.Row="0" Text="{Binding ReceiverLogn, Mode=TwoWay}"/>
+                    <Button Command="{Binding AddReceiver}" Grid.Row="1">Добавить</Button>
+                    <ComboBox ItemsSource="{Binding EmployeeList, Mode=TwoWay}" Grid.Row="2">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding Login}"/>
+                                    <TextBlock Text="{Binding Id}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
 
-        <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding ListLetter}" SelectedItem="{Binding SelectLetter}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Path=Head}"/>
-                        <!--<TextBlock Text="{Binding Path=Sender}"/>-->
-                        <TextBlock Text="{Binding Path=SendDate}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <StackPanel Grid.Column="1" Grid.Row="1">
-            <TextBlock Text="{Binding SelectLetter.Head}"/>
-            <TextBlock Text="{Binding SelectLetter.ContentMessage}"/>
-            <TextBlock Text="{Binding AutorName}"/>
-            <TextBlock Text="{Binding SelectLetter.SendDate}"/>
-        </StackPanel>
-        
-    </Grid>
+                <Button Command="{Binding SendMessage}" Grid.Row="3" Grid.ColumnSpan="2">Отправить</Button>
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Входящие" x:Name="InBoxTab">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.4*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="0.7*"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button Grid.Row="0" Command="{Binding LoadAllLetter}">Получить все сообщения</Button>
+                        <Button Grid.Row="1" Command="{Binding LoadNewLetter}">Получить новые сообщения</Button>
+                    </Grid>
+
+                    <ListBox Grid.Row="1" ItemsSource="{Binding ListLetter}" SelectedItem="{Binding SelectLetter}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Path=Head}"/>
+                                    <TextBlock Text="{Binding Path = Sender.Login}"/>
+                                    <TextBlock Text="{Binding Path=SendDate}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+
+                <StackPanel Grid.Column="1" DataContext="{Binding SelectLetter}">
+                    <TextBlock Text="{Binding Path = Head}"/>
+                    <TextBlock Text="{Binding Path = ContentMessage}"/>
+                    <TextBlock Text="{Binding Path = Sender.Login}"/>
+                    <TextBlock Text="{Binding Path = SendDate}"/>
+                </StackPanel>
+
+            </Grid>
+        </TabItem>
+    </TabControl>
 </Window>

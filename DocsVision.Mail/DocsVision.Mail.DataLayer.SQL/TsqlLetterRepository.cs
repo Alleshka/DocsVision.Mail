@@ -12,10 +12,12 @@ namespace DocsVision.Mail.DataLayer.SQL
     public class TsqlLetterRepository : ILetterRepository
     {
         private String _connectionString;
+        private IUserRepository userRepository;
 
-        public TsqlLetterRepository(String connectString)
+        public TsqlLetterRepository(String connectString, IUserRepository repository)
         {
             _connectionString = connectString;
+            userRepository = repository;
         }
 
         public Letter CreateLetter(Letter letter)
@@ -34,7 +36,7 @@ namespace DocsVision.Mail.DataLayer.SQL
                     command.Parameters.AddWithValue("@id", letter.Id);
                     command.Parameters.AddWithValue("@head", letter.Head);
                     command.Parameters.AddWithValue("@contentmessage", letter.ContentMessage);
-                    command.Parameters.AddWithValue("@sender", letter.Sender);
+                    command.Parameters.AddWithValue("@sender", letter.Sender.Id);
 
                     using (var reader = command.ExecuteReader())
                     {
@@ -85,8 +87,9 @@ namespace DocsVision.Mail.DataLayer.SQL
                         while (reader.Read())
                         {
                             Letter letter = ParseLetter(reader);
-                            letter.Recepient = userID;
+                            letter.Recepient = userRepository.GetUserInfo(userID);
                             letter.SendDate = reader.GetDateTime(reader.GetOrdinal("senddate"));
+                            letter.IsRead = reader.GetBoolean(reader.GetOrdinal("IsRead"));
                             yield return letter;
                         }
                     }
@@ -111,8 +114,10 @@ namespace DocsVision.Mail.DataLayer.SQL
                         while (reader.Read())
                         {
                             Letter letter = ParseLetter(reader);
-                            letter.Recepient = userId;
+                            letter.Recepient = userRepository.GetUserInfo(userId);
                             letter.SendDate = reader.GetDateTime(reader.GetOrdinal("senddate"));
+                            letter.IsRead = false;
+                            //letter.IsRead = reader.GetBoolean(reader.GetOrdinal("IsRead"));
                             yield return letter;
                         }
                     }
@@ -138,7 +143,7 @@ namespace DocsVision.Mail.DataLayer.SQL
                         while (reader.Read())
                         {
                             Letter letter = ParseLetter(reader);
-                            letter.Recepient = reader.GetGuid(reader.GetOrdinal("rec"));
+                            letter.Recepient = userRepository.GetUserInfo(reader.GetGuid(reader.GetOrdinal("rec")));
                             letter.SendDate = reader.GetDateTime(reader.GetOrdinal("senddate"));
                             yield return letter;
                         }
@@ -192,7 +197,7 @@ namespace DocsVision.Mail.DataLayer.SQL
                 Id = reader.GetGuid(reader.GetOrdinal("id")),
                 Head = reader.GetString(reader.GetOrdinal("head")),
                 ContentMessage = reader.GetString(reader.GetOrdinal("contentmessage")),
-                Sender = reader.GetGuid(reader.GetOrdinal("sender")),
+                Sender = userRepository.GetUserInfo(reader.GetGuid(reader.GetOrdinal("sender"))),
             };
 
             return letter;

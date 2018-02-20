@@ -15,7 +15,7 @@ namespace DocsVision.Mail.API.Controllers
 
         public LetterController()
         {
-            letterRepository = new TsqlLetterRepository(_connectionString);
+            letterRepository = new TsqlLetterRepository(_connectionString, new TsqlUserRepository(_connectionString));
         }
 
         [HttpPost]

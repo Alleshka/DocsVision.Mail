@@ -70,9 +70,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BaseCommand.cs" />
-    <Compile Include="LetterModel.cs" />
     <Compile Include="ServiceClient.cs" />
+    <Compile Include="ViewModel\BaseViewModel.cs" />
     <Compile Include="ViewModel\LetterListViewModel.cs" />
+    <Compile Include="ViewModel\SendLetterViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -114,6 +115,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Converter\" />
     <Folder Include="View\" />
   </ItemGroup>
   <ItemGroup>

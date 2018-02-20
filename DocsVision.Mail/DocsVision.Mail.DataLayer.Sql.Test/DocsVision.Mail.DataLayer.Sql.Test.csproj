@@ -60,6 +60,10 @@
       <Project>{db57ae28-c3dc-4842-a0e7-a4cab0abf895}</Project>
       <Name>DocsVision.Mail.DataLayer.SQL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DocsVision.Mail.DataLayer\DocsVision.Mail.DataLayer.csproj">
+      <Project>{9058e987-6fd1-444b-8d74-12760f351d93}</Project>
+      <Name>DocsVision.Mail.DataLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DocsVision.Mail.Model\DocsVision.Mail.Model.csproj">
       <Project>{74e229d5-8bd2-4a59-bef4-002ad67cd438}</Project>
       <Name>DocsVision.Mail.Model</Name>

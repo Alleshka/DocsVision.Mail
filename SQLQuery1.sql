@@ -123,7 +123,7 @@ go
 create procedure GetAllLetters
 	@userID uniqueidentifier
 as
-	select l.id, l.head, l.contentmessage, l.sender, r.senddate from Letter as l join Recepient as r on l.id = r.LetterID where r.EmployeeID = @userID
+	select l.id, l.head, l.contentmessage, l.sender, r.senddate, r.isRead from Letter as l join Recepient as r on l.id = r.LetterID where r.EmployeeID = @userID
 go
 
 create procedure GetSendedLetters
