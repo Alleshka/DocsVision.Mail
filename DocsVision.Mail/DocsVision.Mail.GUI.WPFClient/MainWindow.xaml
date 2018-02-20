@@ -1,0 +1,50 @@
+﻿<Window x:Class="DocsVision.Mail.GUI.WPFClient.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DocsVision.Mail.GUI.WPFClient"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.8*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="0.6*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            
+            <Button Command="{Binding LoadAllLetter}" Grid.Row="0">Получить все сообщения</Button>
+            <Button Command="{Binding LoadNewLetter}" Grid.Row="1">Получить новые сообщения</Button>
+
+        </Grid>
+
+
+        <ListBox Grid.Column="0" Grid.Row="1" ItemsSource="{Binding ListLetter}" SelectedItem="{Binding SelectLetter}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Path=Head}"/>
+                        <!--<TextBlock Text="{Binding Path=Sender}"/>-->
+                        <TextBlock Text="{Binding Path=SendDate}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Grid.Column="1" Grid.Row="1">
+            <TextBlock Text="{Binding SelectLetter.Head}"/>
+            <TextBlock Text="{Binding SelectLetter.ContentMessage}"/>
+            <TextBlock Text="{Binding AutorName}"/>
+            <TextBlock Text="{Binding SelectLetter.SendDate}"/>
+        </StackPanel>
+        
+    </Grid>
+</Window>
