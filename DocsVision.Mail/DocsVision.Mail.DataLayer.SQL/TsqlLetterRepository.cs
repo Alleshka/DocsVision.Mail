@@ -40,7 +40,7 @@ namespace DocsVision.Mail.DataLayer.SQL
 
                     using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.Read()) throw new Exception("Создание письма не удалось");
+                        if (!reader.Read()) return null;
                         else return ParseLetter(reader);
                     }
                 }
@@ -62,7 +62,7 @@ namespace DocsVision.Mail.DataLayer.SQL
 
                     using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.Read()) throw new Exception("Создание письма не удалось");
+                        if (!reader.Read()) return null;
                         else return ParseLetter(reader);
                     }
                 }

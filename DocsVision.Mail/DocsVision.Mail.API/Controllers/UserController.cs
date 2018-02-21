@@ -29,6 +29,7 @@ namespace DocsVision.Mail.API.Controllers
             else
             {
                 Employee tmp = userRepository.CreateEmployee(user);
+                if (tmp == null) throw new Exception("Создание пользователя не удалось");
                 return tmp;
             }
         }
@@ -38,6 +39,7 @@ namespace DocsVision.Mail.API.Controllers
         public Employee UserLogIn([FromBody]Employee user)
         {
             Employee tmp = userRepository.LoginEmployee(user.Login, user.Password);
+            if (tmp == null) throw new FalledLogin();
             return tmp;
         }
 
@@ -46,6 +48,7 @@ namespace DocsVision.Mail.API.Controllers
         public Employee GetInfo(Guid id)
         {
             Employee tmp = userRepository.GetUserInfo(id);
+            if (tmp == null) throw new NotFoundException("Пользователь не найден");
             return tmp;
         }
 
@@ -54,6 +57,7 @@ namespace DocsVision.Mail.API.Controllers
         public Employee GetInfo(String login)
         {
             Employee tmp = userRepository.FindUserByLogin(login);
+            if (tmp == null) throw new NotFoundException("Пользователь не найден");
             return tmp;
         }
     }

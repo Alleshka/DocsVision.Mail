@@ -23,6 +23,7 @@ namespace DocsVision.Mail.API.Controllers
         public Letter CreateLetter([FromBody]Letter letter)
         {
             Letter tmp = letterRepository.CreateLetter(letter);
+            if (tmp == null) throw new Exception("Создать письмо не удалось");
             return tmp;
         }
 
@@ -30,7 +31,9 @@ namespace DocsVision.Mail.API.Controllers
         [Route("api/letter/{id}")]
         public Letter GetLetterInfo(Guid id)
         {
-            return letterRepository.GetLetter(id);
+            var letter = letterRepository.GetLetter(id);
+            if (letter == null) throw new NotFoundException("Отсутствует письмо с указанным ID");
+            return letter;
         }
 
         [HttpGet]

@@ -5,6 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Configuration;
 using DocsVision.Mail.Model;
 using System.Windows.Input;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DocsVision.Mail.GUI.WPFClient.ViewModel
 {
@@ -51,7 +53,7 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
         {
             get => new BaseCommand((object obj) => 
                 {
-                    ListLetter = _client.GetNewLetters(curUserId);
+                    ListLetter = _client.GetNewLetters(curUserId).OrderByDescending(x => x.SendDate).ToList();
                 });
         }
         public ICommand LoadAllLetter
@@ -60,7 +62,7 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
             {
                 try
                 {
-                    ListLetter = _client.GetAllLetters(curUserId);
+                    ListLetter = _client.GetAllLetters(curUserId).OrderByDescending(x => x.SendDate).ToList();
                 }
                 catch (Exception ex)
                 {
@@ -76,6 +78,21 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
                 {
                     _client.ReadLetter(SelectLetter.Id, curUserId);
                     SelectLetter.IsRead = true;
+                }
+            });
+        }
+
+        public ICommand LoadSendedLetter
+        {
+            get => new BaseCommand((object obj) =>
+            {
+                try
+                {
+                    ListLetter = _client.GetSendendLetters(curUserId).OrderByDescending(x=>x.SendDate).ToList();
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message);
                 }
             });
         }

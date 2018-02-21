@@ -117,7 +117,7 @@ namespace DocsVision.Mail.DataLayer.Sql.Test
                 var user = userRepository.LoginEmployee(login, password);
                 flag = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 flag = true;
             }
@@ -142,7 +142,7 @@ namespace DocsVision.Mail.DataLayer.Sql.Test
                 var user = userRepository.LoginEmployee(login, password);
                 flag = false;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 flag = true;
             }

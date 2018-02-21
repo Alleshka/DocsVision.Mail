@@ -45,7 +45,7 @@
                         <TextBox Text="{Binding Head, Mode=TwoWay}" Grid.Row="1" Grid.Column="3"/>
 
                         <TextBlock Text="Содержимое" Grid.Row="3" Grid.Column="1"/>
-                        <TextBox Text="{Binding Content, Mode=TwoWay}" Grid.Row="3" Grid.Column="3" TextWrapping="Wrap" SpellCheck.IsEnabled="True" Language="ru-ru" BorderBrush="Black"/>
+                        <TextBox Text="{Binding Content, Mode=TwoWay}" Grid.Row="3" Grid.Column="3" TextWrapping="Wrap" SpellCheck.IsEnabled="True" Language="ru-ru" BorderBrush="Black" VerticalScrollBarVisibility="Auto"/>
 
                         <TextBlock Text="Получатели" Grid.Row="5" Grid.Column="1"/>
                         <Grid Grid.Row="5" Grid.Column="3">
@@ -100,9 +100,12 @@
                                     <RowDefinition Height="5*"/>
                                     <RowDefinition Height="5"/>
                                     <RowDefinition Height="5*"/>
+                                    <RowDefinition Height="5"/>
+                                    <RowDefinition Height="5*"/>
                                 </Grid.RowDefinitions>
                                 <Button Grid.Row="0" Command="{Binding LoadAllLetter}">Получить все сообщения</Button>
-                                <Button Grid.Row="3" Command="{Binding LoadNewLetter}">Получить новые сообщения</Button>
+                                <Button Grid.Row="2" Command="{Binding LoadNewLetter}">Получить новые сообщения</Button>
+                                <Button Grid.Row="4" Command="{Binding LoadSendedLetter}" Content="Получить исходящие"/>
                             </Grid>
                             <ListBox Grid.Row="1" ItemsSource="{Binding ListLetter}" SelectedItem="{Binding SelectLetter}">
                                 <ListBox.ItemTemplate>
@@ -141,23 +144,27 @@
                         <Grid Grid.Column="1" DataContext="{Binding SelectLetter}" ShowGridLines="False">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="5"/>
-                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/> <!-- Head -->
                                 <RowDefinition Height="5"/>
-                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="15"/> <!-- Sender Login -->
+                                <RowDefinition Height="2"/>
+                                <RowDefinition Height="15"/> <!-- Sender Name -->
                                 <RowDefinition Height="5"/>
-                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="15"/> <!-- Recepient Login -->
+                                <RowDefinition Height="3"/>
+                                <RowDefinition Height="15"/> <!-- Sender Name -->
                                 <RowDefinition Height="5"/>
-                                <RowDefinition Height="150*"/>
+                                <RowDefinition Height="150*"/> <!-- Content -->
                                 <RowDefinition Height="5"/>
-                                <RowDefinition Height="25"/>
+                                <RowDefinition Height="25"/> <!-- Send date -->
                                 <RowDefinition Height="5"/>
                             </Grid.RowDefinitions>
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="5"/>
-                                <ColumnDefinition Width="3*"/>
+                                <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="3"/>
-                                <ColumnDefinition Width="7*"/>
+                                <ColumnDefinition Width="10*"/>
                                 <ColumnDefinition Width="5"/>
                             </Grid.ColumnDefinitions>
 
@@ -177,11 +184,24 @@
                                 <TextBlock Text="{Binding Path = Sender.LastName}" Grid.Column="3" VerticalAlignment="Center"/>
                             </Grid>
 
-                            <TextBlock Text="Содержание: " Grid.Column="1" Grid.Row="7"/>
-                            <TextBlock Text="{Binding Path = ContentMessage}" Grid.Column="3" Grid.Row="7" TextWrapping="Wrap"/>
+                            <TextBlock Text="Кому:" Grid.Column="1" Grid.Row="7"/>
+                            <TextBlock Text="{Binding Path = Recepient.Login}" Grid.Column="3" Grid.Row="7"/>
 
-                            <TextBlock Text="Дата отправки:" Grid.Column="1" Grid.Row="9"/>
-                            <TextBlock Text="{Binding Path = SendDate}" Grid.Column="3" Grid.Row="9"/>
+                            <Grid Grid.Column="3" Grid.Row="9" ShowGridLines="False"    >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="5*"/>
+                                    <ColumnDefinition Width="3"/>
+                                    <ColumnDefinition Width="5*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Path = Recepient.FirstName}" Grid.Column="0" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding Path = Recepient.LastName}" Grid.Column="3" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <TextBlock Text="Содержание: " Grid.Column="1" Grid.Row="11"/>
+                            <TextBox Text="{Binding Path = ContentMessage}" Grid.Column="3" Grid.Row="11" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Auto"/>
+
+                            <TextBlock Text="Дата отправки:" Grid.Column="1" Grid.Row="13"/>
+                            <TextBlock Text="{Binding Path = SendDate}" Grid.Column="3" Grid.Row="13"/>
                         </Grid>
                     </Grid>
                 </TabItem>

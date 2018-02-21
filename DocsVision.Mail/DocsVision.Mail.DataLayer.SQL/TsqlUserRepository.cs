@@ -42,7 +42,7 @@ namespace DocsVision.Mail.DataLayer.SQL
 
                     using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.Read()) throw new Exception("Создание пользователя не удалось");
+                        if (!reader.Read()) return null;
                         else return ParseEmployee(reader);
                     }
                 }
@@ -64,7 +64,7 @@ namespace DocsVision.Mail.DataLayer.SQL
 
                     using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.Read()) throw new Exception("Пользователь не найден");
+                        if (!reader.Read()) return null;
                         else return ParseEmployee(reader);
                     }
                 }
@@ -86,7 +86,7 @@ namespace DocsVision.Mail.DataLayer.SQL
 
                     using (var reader = command.ExecuteReader())
                     {
-                        if (!reader.Read()) throw new Exception("Пользователь не найден");
+                        if (!reader.Read()) return null;
                         else return ParseEmployee(reader);
                     }
                 }
@@ -111,7 +111,7 @@ namespace DocsVision.Mail.DataLayer.SQL
 
                     using (var reader = command.ExecuteReader())
                     {   
-                        if (!reader.Read()) throw new Exception("Неверный логин или пароль");
+                        if (!reader.Read()) return null;
                         else return ParseEmployee(reader);
                     }
                 }
