@@ -45,7 +45,7 @@ namespace DocsVision.Mail.GUI.WPFClient
             return ResponseParse<Employee>(response);
         }
 
-        public Employee CreateEmoloyee(Employee emp)
+        public Employee CreateEmployee(Employee emp)
         {
             var response = _client.PostAsJsonAsync<Employee>($"api/user/reg", emp).Result;
             return ResponseParse<Employee>(response);

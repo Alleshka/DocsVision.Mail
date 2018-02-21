@@ -13,10 +13,12 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
         private Guid curUserId;
         private ServiceClient _client;
 
-        public LetterListViewModel(Guid id)
+        public LetterListViewModel(Guid id, ServiceClient client)
         {
             curUserId = id;
-            _client = new ServiceClient(ConfigurationManager.AppSettings["hostdomain"]);
+            _client = client;
+
+            LoadNewLetter.Execute(null);
         }
 
         private List<Letter> listLetter;
@@ -73,6 +75,7 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
                 if (selectLetter.IsRead == false)
                 {
                     _client.ReadLetter(SelectLetter.Id, curUserId);
+                    SelectLetter.IsRead = true;
                 }
             });
         }

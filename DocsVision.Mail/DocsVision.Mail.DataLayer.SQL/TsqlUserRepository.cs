@@ -110,7 +110,7 @@ namespace DocsVision.Mail.DataLayer.SQL
                     command.Parameters.AddWithValue("@Password", passHash);
 
                     using (var reader = command.ExecuteReader())
-                    {
+                    {   
                         if (!reader.Read()) throw new Exception("Неверный логин или пароль");
                         else return ParseEmployee(reader);
                     }

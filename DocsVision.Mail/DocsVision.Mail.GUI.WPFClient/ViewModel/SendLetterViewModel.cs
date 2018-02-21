@@ -14,10 +14,12 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
         private ServiceClient _client;
         private Guid curUserId;
 
-        public SendLetterViewModel(Guid user)
+        public SendLetterViewModel(Guid user, ServiceClient client)
         {
             curUserId = user;
-            _client = new ServiceClient(ConfigurationManager.AppSettings["hostdomain"]);
+            _client = client;
+
+           
         }
 
         private String head;
@@ -84,10 +86,17 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
         {
             get => new BaseCommand((object obj) =>
             {
-                Employee tmp = _client.FindUserByID(login);
-                ReceiverLogn = "";
-                if (employeeList == null) EmployeeList = new ObservableCollection<Employee>();
-                employeeList.Add(tmp);
+                try
+                {
+                    Employee tmp = _client.FindUserByID(login);
+                    ReceiverLogn = "";
+                    if (employeeList == null) EmployeeList = new ObservableCollection<Employee>();
+                    employeeList.Add(tmp);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show(ex.Message);
+                }
             });
         }
         

@@ -1,9 +1,25 @@
 ﻿<Application x:Class="DocsVision.Mail.GUI.WPFClient.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DocsVision.Mail.GUI.WPFClient"
+             xmlns:local="clr-namespace:DocsVision.Mail.GUI.WPFClient" 
+             xmlns:view="clr-namespace:DocsVision.Mail.GUI.WPFClient.View"  
+             xmlns:viewmodel="clr-namespace:DocsVision.Mail.GUI.WPFClient.ViewModel"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            
+            <DataTemplate DataType="{x:Type viewmodel:LoginViewModel}">
+                <view:LoginView HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodel:RegViewModel}">
+                <view:RegForm HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodel:MainViewModel}">
+                <view:MainView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </DataTemplate>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

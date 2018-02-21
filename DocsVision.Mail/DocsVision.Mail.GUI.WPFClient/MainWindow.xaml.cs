@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DocsVision.Mail.GUI.WPFClient.ViewModel;
+using DocsVision.Mail.GUI.WPFClient.View;
 
 namespace DocsVision.Mail.GUI.WPFClient
 {
@@ -24,9 +25,18 @@ namespace DocsVision.Mail.GUI.WPFClient
         public MainWindow()
         {
             InitializeComponent();
-            Guid.TryParse("3E34BB2F-5692-4393-B19F-E4D7B5696CAE", out Guid id);
-            InBoxTab.DataContext = new LetterListViewModel(id);
-            SendBoxTab.DataContext = new SendLetterViewModel(id);
+
+            this.DataContext = new ContentPresenterViewModel();
+
+            //LoginView view = new LoginView();
+
+            //if (view.ShowDialog() == true)
+            //{
+            //    Guid id = view.CurGuid;
+            //    InBoxTab.DataContext = new LetterListViewModel(id);
+            //    SendBoxTab.DataContext = new SendLetterViewModel(id);
+            //}
+            //else this.Close();
         }
     }
 }
