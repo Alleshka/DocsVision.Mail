@@ -9,32 +9,39 @@
     <GroupBox Header="Регистрация">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="25"/>
+                <RowDefinition Height="5"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="150"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Login" Grid.Row="0" Grid.Column="0"/>
-            <TextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
+            <TextBlock Text="Login" Grid.Row="1" Grid.Column="0"/>
+            <TextBox Text="{Binding Login, Mode=TwoWay}" Grid.Row="1" Grid.Column="3"/>
 
-            <TextBlock Text="Password" Grid.Row="1" Grid.Column="0"/>
-            <PasswordBox x:Name="_password" Grid.Row="1" Grid.Column="1"/>
+            <TextBlock Text="Password" Grid.Row="3" Grid.Column="0"/>
+            <PasswordBox x:Name="_password" Grid.Row="3" Grid.Column="3"/>
 
-            <TextBlock Text="Имя" Grid.Row="2" Grid.Column="0"/>
-            <TextBox Text="{Binding FirstName, Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
+            <TextBlock Text="Имя" Grid.Row="5" Grid.Column="0"/>
+            <TextBox Text="{Binding FirstName, Mode=TwoWay}" Grid.Row="5" Grid.Column="3"/>
 
-            <TextBlock Text="Фамилия" Grid.Row="3" Grid.Column="0"/>
-            <TextBox Text="{Binding LastName, Mode=TwoWay}" Grid.Row="3" Grid.Column="1"/>
+            <TextBlock Text="Фамилия" Grid.Row="7" Grid.Column="0"/>
+            <TextBox Text="{Binding LastName, Mode=TwoWay}" Grid.Row="7" Grid.Column="3"/>
 
-            <Button Command="{Binding CreateCommand}" CommandParameter="{Binding ElementName=_password}" Grid.Row="4" Grid.Column="1" Content="Регистрация"/>
-            <Button Command="{Binding BackCommand}" Grid.Row="4" Grid.Column="0" Content="Назад"/>
+            <Button Command="{Binding CreateCommand}" CommandParameter="{Binding ElementName=_password}" Grid.Row="9" Grid.Column="3" Content="Регистрация"/>
+            <Button Command="{Binding BackCommand}" Grid.Row="9" Grid.Column="0" Content="Назад"/>
         </Grid>
     </GroupBox>
 </UserControl>
