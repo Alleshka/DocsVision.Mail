@@ -20,7 +20,7 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
             curUserId = id;
             _client = client;
 
-            LoadNewLetter.Execute(null);
+            // LoadNewLetter.Execute(null);
         }
 
         private List<Letter> listLetter;

@@ -36,7 +36,7 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
         public ContentPresenterViewModel()
         {
             Title = "TestMailProgram";
-            ShowView(this, new LoginViewModel());
+            ShowView(this, new MainViewModel(Guid.NewGuid()));
         }
 
         public void ShowView(object sender, BaseViewModel viewModel)

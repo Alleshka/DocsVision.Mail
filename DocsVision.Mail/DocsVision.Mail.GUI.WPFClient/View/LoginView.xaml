@@ -31,7 +31,7 @@
             <TextBlock Text="Password" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
             <PasswordBox x:Name="_password" Grid.Row="3" Grid.Column="3" VerticalContentAlignment="Center"/>
 
-            <Button Command="{Binding LogInCommand}" CommandParameter="{Binding ElementName=_password}" Content="Вход" Grid.Row="5" Grid.Column="1" VerticalContentAlignment="Center"/>
+            <Button Command="{Binding LoginCommand}" CommandParameter="{Binding ElementName=_password}" Content="Вход" Grid.Row="5" Grid.Column="1" VerticalContentAlignment="Center"/>
             <Button Command="{Binding RegCommand}"  Content="Регистрация" Grid.Row="5" Grid.Column="3" VerticalContentAlignment="Center"/>
         </Grid>
     </GroupBox>

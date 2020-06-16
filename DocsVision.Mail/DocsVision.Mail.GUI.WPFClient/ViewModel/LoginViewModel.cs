@@ -33,12 +33,12 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
         {
             get => new BaseCommand((object obj) =>
             {
-                PasswordBox box = obj as PasswordBox;
+                // PasswordBox box = obj as PasswordBox;
 
                 try
                 {
-                    Guid id = _client.Login(Login, box.Password).Id;    
-                    OnShowView(this, new MainViewModel(id));
+                    // Guid id = _client.Login(Login, box.Password).Id;    
+                    OnShowView(this, new MainViewModel(Guid.NewGuid()));
 
                 }
                 catch (Exception ex)
@@ -52,7 +52,7 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
         {
             get => new BaseCommand((object ojb) =>
             {
-                OnShowView(this, new RegViewModel()); 
+                OnShowView(this, new MainViewModel(Guid.NewGuid()));
             });
         }
     }

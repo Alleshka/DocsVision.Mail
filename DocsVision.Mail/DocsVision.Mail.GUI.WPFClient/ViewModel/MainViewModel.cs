@@ -10,6 +10,12 @@ using System.Windows.Input;
 
 namespace DocsVision.Mail.GUI.WPFClient.ViewModel
 {
+    public enum ViewMode
+    {
+        LettersList,
+        SendLetter
+    }
+
     public class MainViewModel : BaseViewModel
     {
         private ServiceClient _client;
@@ -25,6 +31,8 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
 
             SendLetter = new SendLetterViewModel(curUserId, _client);
             letterList = new LetterListViewModel(curUserId, _client);
+
+            IsCheckBox = false;
         }
 
         public SendLetterViewModel SendLetter
@@ -53,6 +61,30 @@ namespace DocsVision.Mail.GUI.WPFClient.ViewModel
             {
                 OnShowView(this, new LoginViewModel());
             });
+        }
+
+        private bool _isCheckBox;
+        public bool IsCheckBox
+        {
+            get => _isCheckBox; 
+            set
+            {
+                _isCheckBox = value;
+                CurViewModel = (_isCheckBox ? SendLetter as BaseViewModel : LetterList as BaseViewModel);
+
+                OnPropertyChanged("IsCheckBox");
+            }
+        }
+
+        private BaseViewModel _curViewModel;
+        public BaseViewModel CurViewModel
+        {
+            get => _curViewModel;
+            set
+            {
+                _curViewModel = value;
+                OnPropertyChanged("CurViewModel");
+            }
         }
     }
 }

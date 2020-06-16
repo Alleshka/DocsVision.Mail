@@ -20,6 +20,13 @@
                 <view:MainView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
             </DataTemplate>
 
+            <DataTemplate DataType="{x:Type viewmodel:SendLetterViewModel}">
+                <view:SendLetterView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodel:LetterListViewModel}">
+                <view:LetterListView HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
